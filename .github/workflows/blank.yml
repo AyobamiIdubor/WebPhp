@@ -1,0 +1,213 @@
+<?php
+
+ 
+
+namespace App\Http\Controllers;
+
+ 
+
+use App\Http\Requests;
+
+use Illuminate\Support\Facades\Input;
+
+use App\Rate;
+
+use Illuminate\Http\Request;
+
+use Mail;
+
+ 
+
+use PHPExcel;
+
+use PHPExcel_IOFactory;
+
+use PHPExcel_Settings;
+
+use PHPExcel_Worksheet;
+
+ 
+
+use Dompdf\Dompdf;
+
+use Dompdf\Options;
+
+ 
+
+require_once '/var/www/html/perkss/vendor/tcpdf/tcpdf.php';
+
+ 
+
+class MYPDF extends \TCPDF
+
+{
+
+               public function Footer()
+
+               {
+
+        $this->SetY(-15);
+
+        $this->SetFont('helvetica', 'I', 8);
+
+        $this->Cell(0, 10, 'CONFIDENTIAL', 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+        // $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+    }
+
+}
+
+ 
+
+class HomeController extends Controller
+
+{
+
+    /**
+
+     * Create a new controller instance.
+
+     *
+
+     * @return void
+
+     */
+
+    public function __construct()
+
+    {
+
+        $this->middleware('auth');
+
+    }
+
+ 
+
+    /**
+
+     * Show the application dashboard.
+
+     *
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+    public function index(Request $request)
+
+    {
+
+        $rates = Rate::all();
+
+       
+
+        $last_paycheck = "";
+
+        $last_perkss = "";
+
+       
+
+        foreach ($rates as $rate)
+
+        {
+
+                       if ($rate->table_name == "upload" && $rate->table_key == "paycheck") $last_paycheck = $rate->table_value;
+
+                       if ($rate->table_name == "upload" && $rate->table_key == "perkss") $last_perkss = $rate->table_value;
+
+        }
+
+       
+
+        return view('welcome', ['last_paycheck' => $last_paycheck, 'last_perkss' => $last_perkss, 'user' => $request->user()]);
+
+    }
+
+   
+
+    public function outOfDate(Request $request)
+
+    {
+
+        $rates = Rate::all();
+
+       
+
+        $last_paycheck = "";
+
+        $last_perkss = "";
+
+       
+
+        foreach ($rates as $rate)
+
+        {
+
+                       if ($rate->table_name == "upload" && $rate->table_key == "paycheck") $last_paycheck = $rate->table_value;
+
+                       if ($rate->table_name == "upload" && $rate->table_key == "perkss") $last_perkss = $rate->table_value;
+
+        }
+
+       
+
+        return view('out_of_date', ['last_paycheck' => $last_paycheck, 'last_perkss' => $last_perkss, 'user' => $request->user()]);
+
+    }
+
+   
+
+    public function help(Request $request)
+
+    {
+
+        $rates = Rate::all();
+
+       
+
+        $last_paycheck = "";
+
+        $last_perkss = "";
+
+       
+
+        foreach ($rates as $rate)
+
+        {
+
+                       if ($rate->table_name == "upload" && $rate->table_key == "paycheck") $last_paycheck = $rate->table_value;
+
+                       if ($rate->table_name == "upload" && $rate->table_key == "perkss") $last_perkss = $rate->table_value;
+
+        }
+
+       
+
+        return view('help', ['last_paycheck' => $last_paycheck, 'last_perkss' => $last_perkss, 'user' => $request->user()]);
+
+    }
+
+ 
+
+    /**
+
+     * Show the billing report.
+
+     *
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+ 
+
+                             
+
+                              return $code;
+
+               }
+
+}
+
+ 
